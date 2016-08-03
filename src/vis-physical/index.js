@@ -84,17 +84,20 @@ function  render ({root}) {
   container
     .classed('foreign', (d) => !d.state)
     .attr('tag',(d) => _.kebabCase(d.tag))
+    .html((d) => d.Status.ContainerStatus.ContainerID.slice(1,12)); 
 
+/*
   container.on('mouseenter',null);
   container.on('mouseleave',null);
 
   container.on('mouseenter',function(){
-    d3.select(this).html((d) => d.name);
+    d3.select(this).html((d) => d.Status.ContainerStatus.ContainerID.slice(1,12) );
   });
 
   container.on('mouseleave',function(){
     d3.select(this).html('');
   });
+*/
 
   cluster.exit().remove();
   container.exit().remove();
