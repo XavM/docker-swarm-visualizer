@@ -9,6 +9,7 @@ import {
   getAllNodes,
   getAllTasks,
   getAllNodeClusters,
+  getAllServices,
   getWebSocket
 } from './utils/request';
 
@@ -102,6 +103,9 @@ function physicalStructProvider([initialNodes,initialContainers]){
     updateNodes(resources[0]);
     
     updateContainers(resources[1]);
+
+    updateServices(resources[2]);
+
     data();
   },
   updateNodes = (nodes) => {
@@ -136,15 +140,15 @@ function physicalStructProvider([initialNodes,initialContainers]){
     for (let container of containers) {
       let contNodeId = container.NodeID;
 
-   for (var i=0, iLen=nodes.length; i<iLen; i++) {
-    if (nodes[i].ID == contNodeId) {
-      if(!nodeOrContainerExists(nodes[i].children,container.ID)){
-        addContainer(container);
+      for (var i=0, iLen=nodes.length; i<iLen; i++) {
+        if (nodes[i].ID == contNodeId) {
+          if(!nodeOrContainerExists(nodes[i].children,container.ID)){
+            addContainer(container);
+          }
+        }
       }
     }
-  }
 
-    }
     for(let node of nodes) {
       for(let container of node.children) {
         if(!nodeOrContainerExists(containers,container.ID)){
@@ -154,6 +158,17 @@ function physicalStructProvider([initialNodes,initialContainers]){
       }
     }
 
+  },
+  updateServices = (services) => {
+    //console.log("XAV", services);
+    //.filter(function(s) { return s.ID === "68ckw1ovoh5ii7itqyec1692u"}).map(function(s) { return s.Spec.Name }).pop()
+    root[0].children.forEach(function(node, nodeIdx) {
+      node.children.forEach(function(ct, ctIdx) {  
+        var serviceName = services.filter(function(s) { return s.ID === ct.ServiceID}).map(function(s) { return s.Spec.Name }).pop()
+        //console.log("XAV", ct.ServiceID, serviceName);
+        root[0].children[nodeIdx].children[ctIdx].serviceName = serviceName;
+      });
+    });
   };
 
   nodeClusters.forEach(addNodeCluster);
@@ -207,7 +222,8 @@ class DataProvider extends EventEmitter {
     console.log(STARTED);
     var clusterInit = Promise.all([
       getAllNodes(),
-      getAllTasks()
+      getAllTasks(),
+      getAllServices()
       ])
     .then((resources) => {
       _.remove(resources[1],(nc) => nc.state === 'Empty cluster' || nc.state === 'Terminated');
