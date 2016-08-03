@@ -78,7 +78,7 @@ function physicalStructProvider([initialNodes,initialContainers]){
   addNodeCluster = (nodeCluster) => {
     var cloned = Object.assign({},nodeCluster);
     cloned.children = [];
-    console.log(cloned);
+    //console.log(cloned);
     root.push(cloned);
   },
   removeNodeCluster = (nodeCluster) => {
@@ -91,7 +91,7 @@ function physicalStructProvider([initialNodes,initialContainers]){
   addNode = (node) => {
     let cloned = Object.assign({},node);
     cloned.children = [];
-    console.log(cloned);
+    //console.log(cloned);
     let clusterUuid = "clusterid";
     let cluster = _.findWhere(root,{ uuid: clusterUuid });
     if(cluster) cluster.children.push(cloned);
@@ -109,7 +109,7 @@ function physicalStructProvider([initialNodes,initialContainers]){
     data();
   },
   updateNodes = (nodes) => {
-    console.log(nodes);
+    //console.log(nodes);
     let currentnodelist = root[0].children;
     for (let node of nodes) {
       if(!nodeOrContainerExists(currentnodelist,node.ID)) {
@@ -160,12 +160,9 @@ function physicalStructProvider([initialNodes,initialContainers]){
 
   },
   updateServices = (services) => {
-    //console.log("XAV", services);
-    //.filter(function(s) { return s.ID === "68ckw1ovoh5ii7itqyec1692u"}).map(function(s) { return s.Spec.Name }).pop()
     root[0].children.forEach(function(node, nodeIdx) {
       node.children.forEach(function(ct, ctIdx) {  
         var serviceName = services.filter(function(s) { return s.ID === ct.ServiceID}).map(function(s) { return s.Spec.Name }).pop()
-        //console.log("XAV", ct.ServiceID, serviceName);
         root[0].children[nodeIdx].children[ctIdx].serviceName = serviceName;
       });
     });
@@ -199,7 +196,7 @@ class DataProvider extends EventEmitter {
   
   start(){
     STARTED = 1;
-    console.log(STARTED);
+    //console.log(STARTED);
     var clusterInit = Promise.all([
       getAllNodes(),
       getAllTasks()
@@ -219,7 +216,7 @@ class DataProvider extends EventEmitter {
   reload() {
     if(STARTED ==0) return;
     STARTED++;
-    console.log(STARTED);
+    //console.log(STARTED);
     var clusterInit = Promise.all([
       getAllNodes(),
       getAllTasks(),
