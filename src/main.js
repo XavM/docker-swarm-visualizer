@@ -46,7 +46,7 @@ function reload(){
   provider.reload();
   setTimeout(reload,MS);
 }
-console.log(MS);
+//console.log(MS);
 provider.on('infrastructure-data',physicalVisualization.render);
 provider.start();
 reload();
