@@ -84,6 +84,7 @@ function  render ({root}) {
   container
     .classed('foreign', (d) => !d.state)
     .attr('tag',(d) => _.kebabCase(d.tag))
+    .attr('style', (d) => 'background-color: ' + d.serviceColor + '!important;')
     .html((d) => "serviceName: " + ( d.serviceName || "") + "<br> ctId: " + d.Status.ContainerStatus.ContainerID.slice(1,12));
 
 /*

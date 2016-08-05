@@ -158,12 +158,21 @@ function physicalStructProvider([initialNodes,initialContainers]){
       }
     }
 
+    root[0].children.forEach(function(node, nodeIdx) {        
+      node.children.sort(function(a, b) { return b.ServiceID - a.ServiceID });           
+    });                                                       
+                                                                                     
+    console.log("XAV", root);                                 
+
   },
   updateServices = (services) => {
+    var colors = ['#2d6c9f', '#408bc9', '#70a8d7', '#a0c5e4', '#cfe2f2'];
     root[0].children.forEach(function(node, nodeIdx) {
       node.children.forEach(function(ct, ctIdx) {  
-        var serviceName = services.filter(function(s) { return s.ID === ct.ServiceID}).map(function(s) { return s.Spec.Name }).pop()
+        var serviceName = services.filter(function(s) { return s.ID === ct.ServiceID}).map(function(s) { return s.Spec.Name }).pop();
+        var serviceIdx = services.map(function(service, idx) { if (service.Spec.Name === serviceName) return idx}).filter(function(i) { return typeof i != "undefined" }).pop();
         root[0].children[nodeIdx].children[ctIdx].serviceName = serviceName;
+        root[0].children[nodeIdx].children[ctIdx].serviceColor = colors[serviceIdx];
       });
     });
   };
